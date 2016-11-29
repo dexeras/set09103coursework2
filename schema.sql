@@ -1,0 +1,7 @@
+DROP TABLE if EXISTS Blubs;
+
+CREATE TABLE Blubs(
+  ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  Author Varchar(255),
+  Content Varchar(255)
+);

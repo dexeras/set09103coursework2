@@ -2,13 +2,13 @@ from flask import Flask, render_template, url_for, request, session, g, redirect
 import sqlite3
 
 app=Flask(__name__)
-db_location='var/database.db'
+db_location='var/sqlite3.db'
 app.secret_key = '>\xa9\xbf\x06b^\xcc}b\x1dn\xea\x92j\\\x84\xce\xdb9\x8dr\x0b\xfd\xdf'
 
 def get_db():
   db=getattr(g,'db',None)
   if db is None:
-    db.sqlite3.connect(db_location)
+    db=sqlite3.connect(db_location)
     g.db = db
     db.text_factory=str
   return db
