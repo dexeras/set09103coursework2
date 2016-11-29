@@ -6,7 +6,12 @@
     <tr>
       <th>Author</th>
       <th>Content</th>
-      <th>Date</th>
     </tr>
+    {% for row in listBlubs : %}
+      <tr>
+        <th>{{row[1]}}</th>
+        <th>{{row[2]}}</th>
+      </tr>
+    {%endfor%}
   </table>
 {%endblock%}

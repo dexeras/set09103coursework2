@@ -9,6 +9,13 @@
       <img src="{{url_for('static',filename='Logo.png')}}"/>
     </a>
   </div>
+  <div id="NavBar">
+    <ul>
+      <a href="{{url_for('blub')}}">
+        <li>Blub</li>
+      </a>
+    </ul>
+  </div>
   <div id="Content">
     {%block content%} {%endblock%}
   </div>

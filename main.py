@@ -30,7 +30,14 @@ def init_db():
 def index():
   try:
     if(session['user_name']):
-      return render_template('index.html', user_name=session['user_name'])
+      db=get_db()
+      query='select * from Blubs'
+      blubs=db.cursor().execute(query)
+      listBlubs=[]
+      for row in blubs:
+        listBlubs.append(row)
+      db.close()
+      return render_template('index.html',user_name=session['user_name'],listBlubs=listBlubs)
   except KeyError:
     pass
   if request.method =="GET":
@@ -38,6 +45,22 @@ def index():
   else:
     session['user_name'] = request.form['user_name']
     return redirect(url_for('index'))
+
+@app.route('/blub',methods=['GET','POST'])
+def blub():
+  db=get_db()
+  if request.method=="GET":
+    return render_template('blub.html')
+  else:
+    print request.form
+    user_name=session['user_name']
+    content=request.form['content']
+    print user_name
+    print content
+    query='insert into Blubs(Author,Content)values("'+user_name+'","'+content+'")'
+    db.cursor().execute(query)
+    db.commit()
+    return render_template('blub.html')
 
 @app.errorhandler(404)
 def page_not_found(error):
