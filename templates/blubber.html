@@ -1,0 +1,11 @@
+{%extends "layout.html"%}
+{%block content %}
+  <h1>{{blubber}}</h1>
+  <table>
+    {%for row in blubberBlubs :%}
+      <tr>
+        <th>{{row[2]}}</th>
+      <tr>
+    {%endfor%}
+  </table>
+{%endblock%}

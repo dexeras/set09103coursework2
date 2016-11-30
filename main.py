@@ -31,7 +31,7 @@ def index():
   try:
     if session['user_name']:
       db=get_db()
-      query='select * from Blubs'
+      query='select Blubbers.UserName,Blubs.Content from Blubs,Blubbers where Blubs.Author=Blubbers.UserName'
       blubs=db.cursor().execute(query)
       listBlubs=[]
       for row in blubs:
@@ -46,13 +46,13 @@ def index():
     db=get_db()
     userName = request.form['user_name']
     password = request.form['password']
-    query='select * from Accounts where UserName="'+userName+'" and Password="'+password+'"'
+    query='select * from Blubbers where UserName="'+userName+'" and Password="'+password+'"'
     result=db.cursor().execute(query)
-    account=[]
+    blubber=[]
     for row in result:
-      account.append(row)
-    if account:
-      session['user_name'] = account[0][1]
+      blubber.append(row)
+    if blubber:
+      session['user_name'] = blubber[0][0]
       return redirect(url_for('index'))
     else:
       return redirect(url_for('index'))
@@ -73,7 +73,7 @@ def create_account():
     password=request.form['password']
     print userName
     print password
-    query='insert into Accounts(UserName,Password)values("'+userName+'","'+password+'")'
+    query='insert into Blubbers(UserName,Password)values("'+userName+'","'+password+'")'
     db.cursor().execute(query)
     db.commit()
     return redirect(url_for('index'))
@@ -93,6 +93,16 @@ def blub():
     db.cursor().execute(query)
     db.commit()
     return render_template('blub.html')
+
+@app.route('/blubber/<blubber>')
+def blubber(blubber):
+  db=get_db()
+  query='select * from Blubs where Author="'+blubber+'"'
+  result=db.cursor().execute(query)
+  blubberBlubs=[]
+  for row in result:
+    blubberBlubs.append(row)
+  return render_template('blubber.html',blubberBlubs=blubberBlubs)
 
 @app.errorhandler(404)
 def page_not_found(error):
