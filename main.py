@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, session, g, redirect
 import sqlite3
 from datetime import datetime, date
+import bcrypt
 
 app=Flask(__name__)
 db_location='var/sqlite3.db'
@@ -46,17 +47,23 @@ def index():
   else:
     db=get_db()
     userName = request.form['user_name']
-    password = request.form['password']
-    query='select * from Blubbers where UserName="'+userName+'" and Password="'+password+'"'
+    typedPassword = request.form['password']
+    query='select Password from Blubbers where UserName="'+userName+'"'
     result=db.cursor().execute(query)
-    blubber=[]
+    password=[]
     for row in result:
-      blubber.append(row)
-    if blubber:
-      session['user_name'] = blubber[0][0]
-      return redirect(url_for('index'))
-    else:
-      return redirect(url_for('index'))
+      password.append(row)
+    if password:
+      password=password[0][0]
+      query='select * from Blubbers where UserName="'+userName+'" and Password="'+bcrypt.hashpw(typedPassword.encode('utf-8'),password)+'"'
+      result=db.cursor().execute(query)
+      blubber=[]
+      for row in result:
+        blubber.append(row)
+      if blubber:
+        session['user_name'] = blubber[0][0]
+        return redirect(url_for('index'))
+  return redirect(url_for('index'))
 
 @app.route('/disconnect')
 def disconnect():
@@ -74,7 +81,7 @@ def create_account():
     password=request.form['password']
     print userName
     print password
-    query='insert into Blubbers(UserName,Password)values("'+userName+'","'+password+'")'
+    query='insert into Blubbers(UserName,Password)values("'+userName+'","'+bcrypt.hashpw(password,bcrypt.gensalt())+'")'
     db.cursor().execute(query)
     db.commit()
     return redirect(url_for('index'))

@@ -1,12 +1,12 @@
 <html>
 <head>
   <title>Create an account ! </title>
-  <link rel="stylesheet" type=text/css href="url_for('static',filename='stylecss'}}">
+  <link rel=stylesheet type=text/css href="{{url_for('static',filename='style.css')}}">
 </head>
 <body>
   <div id="Logo">
     <a href="{{ url_for('index')}}">
-      <mg src="{{url_for('static',filename='Logo.png')}}"/>
+      <img src="{{url_for('static',filename='Logo.png')}}"/>
     </a>
   </div>
   <div id="Content">
@@ -15,7 +15,7 @@
       <label for="user_name">user name : </label>
       <input type="text" name="user_name" id="user_name"/>
       <label for="password">password : </label>
-      <input type="text" name="password" id="password"/>
+      <input type="password" name="password" id="password"/>
       <input type="submit" name="submit" id="submit"/>
     </form>
   </div>
