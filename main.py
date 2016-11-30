@@ -115,7 +115,7 @@ def blub():
     print content
     now=datetime.now()
     print now
-    now=now.strftime('%d/%m/%Y at %H:%m')
+    now=now.strftime('%d/%m/%Y at %H:%M')
     print now
     query='insert into Blubs(Author,Content,Time)values("'+user_name+'","'+content+'","'+now+'")'
     db.cursor().execute(query)
