@@ -36,7 +36,7 @@ def index(message=None):
   try:
     if session['user_name']:
       db=get_db()
-      query='select Blubbers.UserName,Blubs.Content,Blubs.Time from Blubs,Blubbers where Blubs.Author=Blubbers.UserName'
+      query='select Blubbers.UserName,Blubs.Content,Blubs.Time from Blubs,Blubbers where Blubs.Author=Blubbers.UserName order by ID DESC'
       blubs=db.cursor().execute(query)
       listBlubs=[]
       for row in blubs:
@@ -126,7 +126,7 @@ def blub():
 @app.route('/blubber/<blubber>')
 def blubber(blubber):
   db=get_db()
-  query='select * from Blubs where Author="'+blubber+'"'
+  query='select * from Blubs where Author="'+blubber+'" order by ID DESC'
   result=db.cursor().execute(query)
   blubberBlubs=[]
   for row in result:
@@ -135,7 +135,7 @@ def blubber(blubber):
 
 @app.errorhandler(404)
 def page_not_found(error):
-  return"This page doesn't exist",404
+  return render_template('notFound.html'),404
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0',debug=True)
