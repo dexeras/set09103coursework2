@@ -75,13 +75,24 @@ def disconnect():
   return redirect(url_for('index'))
 
 @app.route('/createAccount',methods=['GET','POST'])
-def create_account():
+@app.route('/createAccount/<message>',methods=['GET','POST'])
+def create_account(message=None):
+  if(message != None):
+    flash(message)
   if request.method=="GET":
     return render_template('createAccount.html')
   else:
     db=get_db()
     print request.form
     userName=request.form['user_name']
+    query='select * from Blubbers where UserName="'+userName+'"'
+    result=db.cursor().execute(query)
+    accounts=[]
+    for row in result:
+      accounts.append(row)
+    if accounts:
+      message='A blubber with the same name already exists'
+      return redirect(url_for('create_account',message=message))
     password=request.form['password']
     print userName
     print password
@@ -109,7 +120,8 @@ def blub():
     query='insert into Blubs(Author,Content,Time)values("'+user_name+'","'+content+'","'+now+'")'
     db.cursor().execute(query)
     db.commit()
-    return redirect(url_for('index'))
+    message='You succesfully blubbed!'
+    return redirect(url_for('index',message=message))
 
 @app.route('/blubber/<blubber>')
 def blubber(blubber):

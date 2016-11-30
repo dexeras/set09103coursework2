@@ -10,6 +10,17 @@
     </a>
   </div>
   <div id="Content">
+    <div id="Flash">
+      {%with messages = get_flashed_messages()%}
+        {%if messages%}
+          <ul>
+          {%for message in messages %}
+            <li>{{message|safe}}</li>
+          {%endfor%}
+          </ul>
+        {%endif%}
+      {%endwith%}
+    </div>
     <h1>Create an account</h1>
     <form action="" method="post" name="createAccount">
       <label for="user_name">user name : </label>
