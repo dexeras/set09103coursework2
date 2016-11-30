@@ -6,11 +6,13 @@
     <tr>
       <th>Author</th>
       <th>Content</th>
+      <th>Date of post</th>
     </tr>
     {% for row in listBlubs : %}
       <tr>
         <th><a href="{{url_for('blubber',blubber=row[0])}}">{{row[0]}}</a></th>
         <th>{{row[1]}}</th>
+        <th>{{row[2]}}</th>
       </tr>
     {%endfor%}
   </table>

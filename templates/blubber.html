@@ -2,9 +2,14 @@
 {%block content %}
   <h1>{{blubber}}</h1>
   <table>
+    <tr>
+      <th>Content</th>
+      <th>Date of post</th>
+    </tr>
     {%for row in blubberBlubs :%}
       <tr>
         <th>{{row[2]}}</th>
+        <th>{{row[3]}}</th>
       <tr>
     {%endfor%}
   </table>

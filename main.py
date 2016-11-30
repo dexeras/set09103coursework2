@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, session, g, redirect
 import sqlite3
+from datetime import datetime, date
 
 app=Flask(__name__)
 db_location='var/sqlite3.db'
@@ -31,7 +32,7 @@ def index():
   try:
     if session['user_name']:
       db=get_db()
-      query='select Blubbers.UserName,Blubs.Content from Blubs,Blubbers where Blubs.Author=Blubbers.UserName'
+      query='select Blubbers.UserName,Blubs.Content,Blubs.Time from Blubs,Blubbers where Blubs.Author=Blubbers.UserName'
       blubs=db.cursor().execute(query)
       listBlubs=[]
       for row in blubs:
@@ -89,7 +90,11 @@ def blub():
     content=request.form['content']
     print user_name
     print content
-    query='insert into Blubs(Author,Content)values("'+user_name+'","'+content+'")'
+    now=datetime.now()
+    print now
+    now=now.strftime('%d/%m/%Y at %H:%m')
+    print now
+    query='insert into Blubs(Author,Content,Time)values("'+user_name+'","'+content+'","'+now+'")'
     db.cursor().execute(query)
     db.commit()
     return render_template('blub.html')
