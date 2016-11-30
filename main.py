@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, session, g, redirect
+from flask import Flask, render_template, url_for, request, session, g, redirect, flash
 import sqlite3
 from datetime import datetime, date
 import bcrypt
@@ -29,7 +29,10 @@ def init_db():
     db.commit()
 
 @app.route('/',methods=['GET','POST'])
-def index():
+@app.route('/<message>',methods=['GET','POST'])
+def index(message=None):
+  if(message != None):
+    flash(message)
   try:
     if session['user_name']:
       db=get_db()
@@ -62,7 +65,8 @@ def index():
         blubber.append(row)
       if blubber:
         session['user_name'] = blubber[0][0]
-        return redirect(url_for('index'))
+        message = 'Succesfully logged in!'
+        return redirect(url_for('index',message=message))
   return redirect(url_for('index'))
 
 @app.route('/disconnect')
@@ -84,7 +88,8 @@ def create_account():
     query='insert into Blubbers(UserName,Password)values("'+userName+'","'+bcrypt.hashpw(password,bcrypt.gensalt())+'")'
     db.cursor().execute(query)
     db.commit()
-    return redirect(url_for('index'))
+    message='Account succesfully created!'
+    return redirect(url_for('index',message=message))
 
 @app.route('/blub',methods=['GET','POST'])
 def blub():
@@ -104,7 +109,7 @@ def blub():
     query='insert into Blubs(Author,Content,Time)values("'+user_name+'","'+content+'","'+now+'")'
     db.cursor().execute(query)
     db.commit()
-    return render_template('blub.html')
+    return redirect(url_for('index'))
 
 @app.route('/blubber/<blubber>')
 def blubber(blubber):
