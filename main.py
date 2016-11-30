@@ -29,7 +29,7 @@ def init_db():
 @app.route('/',methods=['GET','POST'])
 def index():
   try:
-    if(session['user_name']):
+    if session['user_name']:
       db=get_db()
       query='select * from Blubs'
       blubs=db.cursor().execute(query)
@@ -43,7 +43,39 @@ def index():
   if request.method =="GET":
     return render_template('login.html')
   else:
-    session['user_name'] = request.form['user_name']
+    db=get_db()
+    userName = request.form['user_name']
+    password = request.form['password']
+    query='select * from Accounts where UserName="'+userName+'" and Password="'+password+'"'
+    result=db.cursor().execute(query)
+    account=[]
+    for row in result:
+      account.append(row)
+    if account:
+      session['user_name'] = account[0][1]
+      return redirect(url_for('index'))
+    else:
+      return redirect(url_for('index'))
+
+@app.route('/disconnect')
+def disconnect():
+  session.pop('user_name',None)
+  return redirect(url_for('index'))
+
+@app.route('/createAccount',methods=['GET','POST'])
+def create_account():
+  if request.method=="GET":
+    return render_template('createAccount.html')
+  else:
+    db=get_db()
+    print request.form
+    userName=request.form['user_name']
+    password=request.form['password']
+    print userName
+    print password
+    query='insert into Accounts(UserName,Password)values("'+userName+'","'+password+'")'
+    db.cursor().execute(query)
+    db.commit()
     return redirect(url_for('index'))
 
 @app.route('/blub',methods=['GET','POST'])

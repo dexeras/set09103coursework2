@@ -1,0 +1,23 @@
+<html>
+<head>
+  <title>Create an account ! </title>
+  <link rel="stylesheet" type=text/css href="url_for('static',filename='stylecss'}}">
+</head>
+<body>
+  <div id="Logo">
+    <a href="{{ url_for('index')}}">
+      <mg src="{{url_for('static',filename='Logo.png')}}"/>
+    </a>
+  </div>
+  <div id="Content">
+    <h1>Create an account</h1>
+    <form action="" method="post" name="createAccount">
+      <label for="user_name">user name : </label>
+      <input type="text" name="user_name" id="user_name"/>
+      <label for="password">password : </label>
+      <input type="text" name="password" id="password"/>
+      <input type="submit" name="submit" id="submit"/>
+    </form>
+  </div>
+</body>
+</html>
